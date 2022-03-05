@@ -10,6 +10,8 @@ class carte {
 public:
     carte();
 
+    carte(char* denumire, char* autorPrincipal, char* autorSecundar, unsigned int pagini, float pret, float rating);
+
     carte(const carte &c);
 
     ~carte();
@@ -61,6 +63,15 @@ carte::carte() {
     pret = 0;
     pagini = 0;
     rating = 0;
+}
+
+carte::carte(char* denumire, char* autorPrincipal, char* autorSecundar, unsigned int pagini, float pret, float rating){
+    strcpy(this->denumire, denumire);
+    strcpy(this->autorPrincipal, autorPrincipal);
+    strcpy(this->autorSecundar, autorSecundar);
+    this->pagini=pagini;
+    this->pret=pret;
+    this->rating=rating;
 }
 
 carte::carte(const carte &c) {
@@ -133,6 +144,7 @@ istream &operator>>(istream &in, carte &c) {
 ostream &operator<<(ostream &out, carte &c) {
     out << "\"" << c.denumire << "\" - " << c.autorPrincipal << ", " << c.autorSecundar << " - "
         << c.pagini << " pages - " << c.pret << "€ - " << c.rating << "/5.0 stars";
+
     return out;
 }
 
@@ -164,8 +176,9 @@ bool carte::operator<=(carte &c) {
 
 
 int main() {
-    carte books[100];
-    int n;
+    carte *books=new carte[100];
+    int n, command=-3, option1=-3, option2=-3;;
+    cin>>n;
 
 //    array reading and welcome message
     cout << "Welcome to Booktility v1.0 !\n..........LOADING...........\n\n";
@@ -174,31 +187,161 @@ int main() {
     cout << "\nEnter a list of books in the following format, using TAB as a field delimiter: \n";
     cout << "BookName       MainAuthor      SecondAuthor      NumberOfPages       Price       GoodReadsRating\n\n";
 
-//    for (int i=0; i<n; i++) {
-//        cout<<"Enter book number "<<i<<":\n";
-//        cin>>books[i];
-//    }
-//abort and  quit
+    for (int i=0; i<n; i++) {           // reading and storing of books
+        cout<<"Enter book number "<<i+1<<":\n";
+        cin>>books[i];
+    }
+
+    // program functions and instructions listing
     cout << "\nBooktility employs the following functions:\n";
-    cout << "1) compare two books\n";
-    cout << "2) modify book\n";
+    cout << "1) modify book\n";
+    cout << "2) compare two books by their rating\n";
     cout << "3) print all stored books\n\n";
     cout << "Instruction manual:\n";
-    cout
-            << "- menus can be accessed by their number ID, given as plain numbers to the keyboard, following the appropriate message\n";
-    cout << "- to abort current function-menu, type \"abort\"\n";
-    cout << "- to quit the program, type \"quit\"\n";
+    cout << "- function-menus can only be accessed by giving their ID number as input\n";
+    cout << "- to abort current function-menu, type \"-1\"\n";
+    cout << "- to quit the program, type \"-2\"\n";
     cout << "- books can only be identified by their order number in the list\n\n";
 
-//    TEST AREA
-    carte c2, c1;
-//    char test[] = "test";
-//    c2.setDenumire("test"); c2.setAutorPrincipal("test"); c2.setAutorSecundar("test"); c2.setPagini(10); c2.setPret(10); c2.setRating(4.7);
-    cin >> c2;
-    c1 = c2;
-//    c1.setRating(0);
-//    cout << c1.getDenumire()<<" "<<c1.getAutorPrincipal()<< " "<<c1.getAutorSecundar()<<" "<<c1.getPagini()<<" "<<c1.getPret()<<" "<<c1.getRating();
-    cout << c2 << '\n' << c1;
-    if (c1 >= c2) cout << "\ny";
+    while(command!=-2) {
+        cout<<"Enter a valid function-menu or command ID: ";           // request and verify input is valid (1-3 for menu options, -1 to abort, -2 to quit
+        cin>>command;
+
+        switch (command) {
+            case 1:         // modify book menu
+                cout<<"Modify menu options:\n";
+                cout<<"1) Book title\n";
+                cout<<"2) Main author\n";
+                cout<<"3) Second author\n";
+                cout<<"4) Number of pages\n";
+                cout<<"5) Price\n";
+                cout<<"6) Goodreads rating\n";
+                cout<<"Enter a valid function-menu option or command ID: ";
+                cin>>option1;
+
+                while (option1<-2 or option1>6){
+                    cout<<"Error: out of range modify-menu option (1-6) and command (-1,-2) IDs";
+                    cin>>option1;
+                }
+
+                if (option1==-1) break;
+                else if (option1==-2) {
+                    command=-2;
+                    break;
+                }
+                else {
+                    cout<<"Enter the ID of the book to be modified: ";
+                    cin>>option2;
+
+                    while(option2<-2 or option2>n) {
+                        cout<<"Error: book IDs must be positive and cannot exceed total book number ";
+                        cin>>option2;
+                    }
+
+                    if (option2==-1) break;
+                    else if(option2==-2) {
+                        command=-2;
+                        break;
+                    }
+                    else{
+                        switch (option1) {
+                            case 1:         // modify book title
+
+                                break;
+
+                            case 2:         // modify main author
+
+                                break;
+
+                            case 3:         // modify second author
+
+                                break;
+
+                            case 4:         //  modify number of pages
+
+                                break;
+
+                            case 5:         // modify price
+
+                                break;
+
+                            case 6:         // modify rating
+
+                                break;
+                        }
+                    }
+                }
+                break;
+
+
+
+            case 2:         // compare books menu
+                cout<<"Enter book IDs or a valid command ID: ";
+                cin>>option1;
+                while (option1<-2 or option1>n){        // verify option1 is a valid number
+                    cout<<"Error: book IDs must be positive and cannot exceed total book number ";
+                    cin>>option1;
+                }
+
+                switch (option1) {
+                    case -1:        // abort
+                        break;
+                    case -2:        // quit
+                        command=-2;
+                        break;
+
+                    default:
+                        cin>>option2;
+                        while (option2<-2 or option2>n) {       // verify option2 is a valid number
+                            cout<<"Error: book IDs must be positive and cannot exceed total book number\nType '-1' to abort or '-2' to quit ";
+                            cin>>option2;
+                        }
+
+                        switch (option2) {
+                            case -1:        // abort
+                                break;
+                            case -2:        // quit
+                                command = -2;
+                                break;
+
+                            default:
+                                if (books[option1] > books[option2]) {
+                                    cout << "\"" << books[option1].getDenumire() << "\" is better rated than \""
+                                         << books[option2] << "\"\n";
+                                    break;
+                                } else if (books[option1] < books[option2]) {
+                                    cout << "\"" << books[option2].getDenumire() << "\" is better rated than \""
+                                         << books[option1] << "\"\n";
+                                    break;
+                                } else {
+                                    cout << "\"" << books[option1].getDenumire() << "\" and \"" << books[option2]
+                                         << "\" are equally rated\n";
+                                    break;
+                                }
+                        }
+                }
+                break;
+
+
+
+            case 3:         // print all stored books
+                cout<<"All stored books will be printed to the screen:\n";
+                for(int i=0; i<n; i++) cout<<books[i]<<'\n';  // printing to the screen
+                break;
+
+
+
+            case -1:         // abort
+                cout<<"Error: abort command can only be used inside function-menus";
+                break;
+            case -2:         // quit
+                break;
+            default:
+                cout<<"Fatal error: out of range function-menu (1-3) and command (-1,-2) IDs";
+                break;
+        }
+    }
+
+    delete[]books;
     return 0;
 }

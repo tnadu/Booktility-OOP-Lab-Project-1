@@ -143,21 +143,8 @@ istream &operator>>(istream &in, carte &c) {
     in.getline(c.autorPrincipal, 50, '\t');
     in.getline(c.autorSecundar, 50, '\t');
     in >> c.pagini;
-    while (c.pagini < 0) {
-        cout << "Error: Number of pages must be a positive integer";
-    }
-
     in >> c.pret;
-    while (c.pret < 0) {
-        cout << "Error: Price must be a positive number ";
-        in >> c.pret;
-    }
-
     in >> c.rating;
-    while (c.rating > 5 or c.rating < 0) {
-        cout << "Error: Rating must be between 0 and 5 ";
-        in >> c.rating;
-    }
     return in;
 }
 
@@ -193,7 +180,6 @@ bool carte::operator<(carte &c) {
 bool carte::operator<=(carte &c) {
     return rating <= c.rating;
 }
-
 
 int main() {
     carte *books = new carte[100];
@@ -242,17 +228,17 @@ int main() {
                 cout << "4) Number of pages\n";
                 cout << "5) Price\n";
                 cout << "6) Goodreads rating\n";
-                cout << ">>> Enter a valid function-menu option or command ID: ";
+                cout << ">>> Enter a valid option or command ID: ";
                 cin >> option1;
 
                 while (option1 < -2 or option1 > 6) {
                     cout << "Error: out of range modify-menu option (1-6) and command (-1,-2) IDs\n";
-                    cout << ">>> Enter a valid function-menu option or command ID: ";
+                    cout << ">>> Enter a valid option or command ID: ";
                     cin >> option1;
                 }
 
                 if (option1 == -1) {        // abort
-                    cout<<"Aborting\n";
+                    cout << "Aborting\n";
                     break;
                 }
                 else if (option1 == -2) {       // quit
@@ -282,6 +268,7 @@ int main() {
                                 cout << ">>> Enter a new book title for \"" << books[option2].getDenumire() << "\": ";
                                 cin.get(); cin.getline(auxiliary, 100);
                                 books[option2].setDenumire(auxiliary);
+                                strcpy(auxiliary, "");
                                 cout << "Book title has been modified\n";
                                 break;
 
@@ -289,14 +276,15 @@ int main() {
                                 cout << ">>> Enter a new main book author for \"" << books[option2].getDenumire() << "\": ";
                                 cin.get(); cin.getline(auxiliary, 50);
                                 books[option2].setAutorPrincipal(auxiliary);
+                                strcpy(auxiliary, "");
                                 cout << "Main book author has been modified\n";
                                 break;
 
                             case 3:         // modify second author
-                                cout << ">>> Enter a new second book author for \"" << books[option2].getDenumire()
-                                     << "\": ";
+                                cout << ">>> Enter a new second book author for \"" << books[option2].getDenumire()<< "\": ";
                                 cin.get(); cin.getline(auxiliary, 50);
                                 books[option2].setAutorSecundar(auxiliary);
+                                strcpy(auxiliary, "");
                                 cout << "Second book author has been modified\n";
                                 break;
 
@@ -316,9 +304,9 @@ int main() {
                                 cout << ">>> Enter a new price for \"" << books[option2].getDenumire() << "\": ";
                                 cin >> option4;
                                 while(option4<0.0) {
-                                    cout<<"Error: Price must be a positive number\n";
+                                    cout << "Error: Price must be a positive number\n";
                                     cout << ">>> Enter a new price for \"" << books[option2].getDenumire() << "\": ";
-                                    cin>>option4;
+                                    cin >> option4;
                                 }
                                 books[option2].setPret(option4);
                                 cout << "Price has been modified\n";
@@ -328,7 +316,7 @@ int main() {
                                 cout << ">>> Enter a new GoodReads rating for \"" << books[option2].getDenumire() << "\": ";
                                 cin >> option4;
                                 while(option4<0.0 or option4>5.0){
-                                    cout<<"Error: Rating must be between 0 and 5\n";
+                                    cout << "Error: Rating must be between 0 and 5\n";
                                     cout << ">>> Enter a new GoodReads rating for \"" << books[option2].getDenumire() << "\": ";
                                     cin>>option4;
                                 }
@@ -342,17 +330,17 @@ int main() {
 
 
             case 2:         // compare books menu
-                cout << ">>> Enter book IDs or a valid command ID: ";
+                cout << ">>> Enter first book ID or a valid command ID: ";
                 cin >> option1;
                 while (option1 < -2 or option1 > n) {        // verify option1 is a valid number
                     cout << "Error: book IDs must be positive and cannot exceed total book number\n";
-                    cout << ">>> Enter book IDs or a valid command ID: ";
+                    cout << ">>> Enter first book ID or a valid command ID: ";
                     cin >> option1;
                 }
 
                 switch (option1) {
                     case -1: {       // abort
-                        cout<<"Aborting\n";
+                        cout << "Aborting\n";
                         break;
                     }
                     case -2:        // quit
@@ -361,11 +349,11 @@ int main() {
 
                     default:
                         option1--;
+                        cout << ">>> Enter second book ID or a valid command ID: ";
                         cin >> option2;
                         while (option2 < -2 or option2 > n) {       // verify option2 is a valid number
-                            cout
-                                    << "Error: book IDs must be positive and cannot exceed total book number\nType '-1' to abort or '-2' to quit ";
-                            cout << ">>> Enter book ID or a valid command ID: ";
+                            cout << "Error: book IDs must be positive and cannot exceed total book number\n";
+                            cout << ">>> Enter second book ID or a valid command ID: ";
                             cin >> option2;
                         }
 
@@ -403,7 +391,6 @@ int main() {
                 for (int i = 0; i < n; i++) cout << books[i] << '\n';  // printing to the screen
                 break;
 
-
             case -1:         // abort
                 cout << "Error: abort command can only be used inside function-menus\n";
                 break;
@@ -418,8 +405,3 @@ int main() {
     delete[]books;
     return 0;
 }
-
-//t1  a1  a12 10  10  1.5
-//t2  a2  a22 20  20  2
-//t3  a3  a32 30  30  2.5
-//t4  a4  a42 35  35  3
